@@ -31,6 +31,9 @@ messageHandler(msg, channel) {
             case msgType == "chann_xp":
                 ThetaApi.sendMsg("Lets GO @" + user.username + "you just reached level" + msg.data.channel_xp + "GG's in chat everyone", channel);
                 break;
+            case msgType == "raid":
+                ThetaApi.sendMsg("RAID HYPE!! :nominal: :nominal: @" + user.username + "went crazy :crazy: and raided with" + msg.data.viewers + "Spam Raid in chat everyone", channel);
+                break;
             case msgType == "chat_message_" + channel:
                 if (msgText.startsWith(channelConfig.prefix)) {
                     this.runCmd(msgText, channel);
