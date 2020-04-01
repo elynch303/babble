@@ -153,8 +153,8 @@ function messageHandler(msg, channel) {
         case msgType == "gift_subscribe":
             sendMsg("Thank you @" + msg.data.sender.username + "for gifting @" + msg.data.recipient.username + msg.data.subscribe, channel);
             break;
-        case msgType == "xp":
-            sendMsg("Lets GO @" + user.username + "you just reached level" + msg.data.xp + "GG's in chat everyone", channel);
+        case msgType == "channel_xp":
+            sendMsg("Lets GO @" + user.username + "you just reached level" + msg.data.channel_xp + "GG's in chat everyone", channel);
             break;
         case msgType == "chat_message_" + channel:
             if (msgText.startsWith(config.prefix)) {
@@ -191,6 +191,10 @@ function runCmd(msg, channel) {
         case msg[0] == "support":
             sendMsg("Babble Support Discord: https://www.discord.gg/73gusq7", channel);
             break;
+       case msg[0] == "magic8" || msg[0] == "m8":
+            play8Ball(msg, usr, channel);
+            break;
+
         // case msg[0] == "mod" && msg[1].startsWith("@"): NOTE: currently not supported
         //     break;
     }
@@ -203,8 +207,8 @@ function checkViewHooks(msg, usr, channel) {
     }
     msg = msg.toLowerCase().substr(1).split(" ");
     switch (true) {
-        case msg[0] == "magic8":
-            play8Ball(usr, channel);
+        case msg[0] == "magic8" || msg[0] == "m8":
+            play8Ball(msg, usr, channel);
             break;
     }
 }
@@ -256,7 +260,7 @@ function numGameManager(msg, usr, channel) {
     //     ngPlayer["tries"] = tries;
     // }
     if (guess == ngChannelConfig.number) {
-        sendMsg("Congrats !! @" + usr.username + " Your the winner :flex:", channel);
+        sendMsg("Congrats!! @" + usr.username + " Your the winner :flex:", channel);
         ngChannelConfig.number = 0;
         ngChannelConfig.numberGame = false;
         // ngChannelConfig.players = {
@@ -268,7 +272,12 @@ function numGameManager(msg, usr, channel) {
     }
 }
 
-function play8Ball(usr, channel) {
+function play8Ball(msg, usr, channel) {
+  let channelConfig = config.channels[channel];
+  let m8ChannelConfig = config.play8Ball[channel];
+  if (!m8ChannelConfig.play8Ball) {
+      //console.log(ngChannelConfig);
+      m8ChannelConfig.play8Ball = true;
     let responses = [
         'It is certain',
         'It is decidedly so',
@@ -278,8 +287,12 @@ function play8Ball(usr, channel) {
         'As I see it, yes',
         'Most likely',
         'Outlook good',
-        'yes',
+        'Yes',
         'Signs point to yes',
+        'You best believe it',
+        'Hell to the Yeah',
+        'Definitely worth GGs in chat',
+        'Depends, did you follow this streamer',
         'Reply hazy try again',
         'Ask again later',
         'Better not tell you now',
@@ -290,6 +303,8 @@ function play8Ball(usr, channel) {
         'My sources say no',
         'Outlook not so good',
         'Very doubtful',
+        'Seriously, you dont want to know',
+        'Dafuq, EPIC RIP',
     ];
     let choice = responses[Math.floor(Math.random() * responses.length)];
     let msg = "@" + usr.username + " " + choice;
@@ -348,4 +363,4 @@ function sendMsg(msg, channel) {
 
 // }
 
-setInterval(getInstalls, 5000);
+setInterval(getInstalls, 500);
